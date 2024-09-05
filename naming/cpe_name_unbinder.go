@@ -200,8 +200,16 @@ func unbindValueFS(s string) (_ interface{}, err error) {
 	return v, nil
 }
 
-// EscapeFS escapes a string so that it can be used within a formatted string.
+// EscapeFS escapes a string so that it can be directly used within a formatted string.
+// Logical values are untouched. Empty strings default to "*" (ANY).
 func EscapeFS(s string) (v string) {
+	switch s {
+	case "*", "-":
+		return s
+	case "":
+		return "*"
+	}
+
 	for i := 0; i < len(s); i++ {
 		switch c := string(s[i]); {
 		case common.IsAlphanum(c):
