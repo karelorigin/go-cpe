@@ -200,6 +200,22 @@ func unbindValueFS(s string) (_ interface{}, err error) {
 	return v, nil
 }
 
+// EscapeFS escapes a string so that it can be used within a formatted string.
+func EscapeFS(s string) (v string) {
+	for i := 0; i < len(s); i++ {
+		switch c := string(s[i]); {
+		case common.IsAlphanum(c):
+			v += c
+		case c == ".", c == "-", c == "_":
+			v += c
+		default:
+			v += "\\" + c
+		}
+	}
+
+	return v
+}
+
 // Inspect each character in a string, copying quoted characters, with
 // their escaping, into the result.  Look for unquoted non alphanumerics
 // and if not "*" or "?", add escaping.
