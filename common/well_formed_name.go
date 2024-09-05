@@ -90,8 +90,8 @@ func (wfn WellFormedName) Get(attribute string) interface{} {
 	}
 }
 
-// GetRaw returns the raw string representation of the given attribute.
-func (wfn WellFormedName) GetRaw(attribute string) interface{} {
+// GetRaw returns the raw string representation of the given attribute. Defaults to "*" (ANY).
+func (wfn WellFormedName) GetRaw(attribute string) string {
 	v := wfn.get(attribute)
 	switch v := v.(type) {
 	case Value:
@@ -99,7 +99,7 @@ func (wfn WellFormedName) GetRaw(attribute string) interface{} {
 	case LogicalValue:
 		return v.Raw()
 	default:
-		return v
+		return "*"
 	}
 }
 
