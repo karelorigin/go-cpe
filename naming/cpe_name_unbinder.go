@@ -178,7 +178,7 @@ func getCompFS(fs string, i int) string {
 // @param s value to be unbound
 // @return logical value or quoted string
 // @throws ParseException
-func unbindValueFS(s string) (interface{}, error) {
+func unbindValueFS(s string) (_ interface{}, err error) {
 	if s == "*" {
 		any, _ := common.NewLogicalValue("ANY")
 		return any, nil
@@ -187,11 +187,17 @@ func unbindValueFS(s string) (interface{}, error) {
 		na, _ := common.NewLogicalValue("NA")
 		return na, nil
 	}
-	result, err := addQuoting(s)
+
+	v := common.Value{
+		Raw: s,
+	}
+
+	v.Quoted, err = addQuoting(s)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+
+	return v, nil
 }
 
 // Inspect each character in a string, copying quoted characters, with
